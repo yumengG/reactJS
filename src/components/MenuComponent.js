@@ -1,51 +1,40 @@
-import React, {Component} from 'react';
-import { Card, CardImg, CardImgOverlay, CardText, CardBody,
-  CardTitle } from 'reactstrap';
+import React from 'react';
+import {
+  Card, CardImg, CardImgOverlay,
+  CardTitle
+} from 'reactstrap';
 
-class Menu extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-          selectedDish:null,
-        }
+
+function Rendermenuitem({dish, onClick}) {
+  console.log(dish.dish);
+  return (
+    <Card key={dish.id}
+      onClick={() => onClick(dish.id)}>
+      <CardImg width="100%" src={dish.image} alt={dish.name} />
+      <CardImgOverlay>
+        <CardTitle>{dish.name}</CardTitle>
+      </CardImgOverlay>
+    </Card>
+  )
+}
+
+function Menu(props) {
+  const menu = props.dishes.map((dish) => {
+    return (
+      <div key={dish.id} className="col-12 col-md-5 m-1">
         
-    }
-    onDishSelect(dish) {
-      this.setState({selectedDish: dish});
-    }
+        <Rendermenuitem dish={dish} onClick={props.onClick} />
+      </div>
+    );
+  });
 
-    render() {
-        const menu = this.props.dishes.map((dish) => {
-            return (
-              <div key={dish.id} className="col-12 col-md-5 m-1">
-                <Card key={dish.id}
-                  onClick={() => this.onDishSelect(dish)}>
-                  <CardImg width="100%" src={dish.image} alt={dish.name} />
-                  <CardImgOverlay>
-                      <CardTitle>{dish.name}</CardTitle>
-                  </CardImgOverlay>
-                </Card>
-              </div>
-            );
-        });
-
-        return (
-          
-          <div className="container">
-            <div className="row">
-              {menu}
-            </div>
-            <div className="row">
-                  <div>
-                    {console.log("select this: ")}
-                    {console.log(this.state.selectedDish)}
-                    
-                    <this.props.Dishdetail dishdtil={this.state.selectedDish}/>
-                  </div>
-                </div>
-          </div>
-        );
-    }
+  return (
+    <div className="container">
+      <div className="row">
+        {menu}
+      </div>
+    </div>
+  );
 }
 
 export default Menu;
