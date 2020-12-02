@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-    Card, CardImg, CardText, CardBody,
-    CardTitle
-} from 'reactstrap';
+import { Card, CardImg, CardText, CardBody, CardTitle } from 'reactstrap';
 
 function Rendercomment({dishdtil}) {
     return (
@@ -17,11 +14,11 @@ function Rendercomment({dishdtil}) {
 
 }
 
-function Dishdetail({ dishdtil }) {
+function Dishdetail({ dishdtil, comments }) {
 
     if (dishdtil != null) {
         console.log(dishdtil.name);
-        const comment = dishdtil.comments.map((com) => {
+        const comment = comments.map((com) => {
             return (
                 <div>
 
