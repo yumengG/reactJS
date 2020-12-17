@@ -147,3 +147,85 @@ export const addPromos = (promos) => ({
     type: ActionTypes.ADD_PROMOS,
     payload: promos
 });
+
+export const fetchLeaders = () => (dispatch) => {
+    
+    dispatch(leadersLoading());
+
+    return fetch(baseUrl + 'leaders')
+    .then(response => {
+        if (response.ok) {
+          return response;
+        } else {
+          var error = new Error('Error ' + response.status + ': ' + response.statusText);
+          error.response = response;
+          throw error;
+        }
+      },
+      error => {
+            var errmess = new Error(error.message);
+            throw errmess;
+      })
+    .then(response => response.json())
+    .then(leaders => dispatch(addLeaders(leaders)))
+    .catch(error => dispatch(leadersFailed(error.message)));
+};
+
+export const leadersLoading = () => ({
+    type: ActionTypes.LEADERS_LOADING
+});
+
+export const leadersFailed = (errmess) => ({
+    type: ActionTypes.LEADERS_FAILED,
+    payload: errmess
+});
+
+export const addLeaders = (leaders) => ({
+    type: ActionTypes.ADD_LEADERS,
+    payload: leaders
+});
+
+export const addFeedback = (feedback) => ({
+  type: ActionTypes.ADD_FEEDBACK,
+  payload: feedback
+});
+
+export const postFeedback = (fn, ln, tn, em, ag, ct, msg) => (dispatch) => {
+
+  const newFeedback = {
+      firstname: fn,
+      lastname: ln,
+      telnum: tn,
+      email: em,
+      aggree: ag,
+      contactType: ct, 
+      message: msg
+  };
+  newFeedback.date = new Date().toISOString();
+  newFeedback.id = 2;
+  //newComment is a javascript object just created and update the file in server
+  return fetch(baseUrl + 'feedback', {
+      method: "POST",
+      body: JSON.stringify(newFeedback),
+      headers: {
+        "Content-Type": "application/json"
+      },
+      credentials: "same-origin"
+  })
+  .then(response => {
+      if (response.ok) {
+        return response;
+      } else {
+        var error = new Error('Error ' + response.status + ': ' + response.statusText);
+        error.response = response;
+        throw error;
+      }
+    },
+    error => {
+          throw error;
+    })
+  .then(response => response.json())
+  //this response is the new comment added to it, addComment concat it to the original state
+  .then(feedback => dispatch(addFeedback(feedback)))
+  .catch(error =>  { console.log('post feedback', error.message); alert('Your comment could not be posted\nError: '+error.message); });
+};
