@@ -6,11 +6,13 @@ import {
 } from 'reactstrap';
 import { Control, LocalForm, Errors } from 'react-redux-form';
 import { Loading } from '../components/LoadingComponent';
+import { baseUrl } from '../shared/baseUrl';
+
 
 function Rendercomment({ dishdtil }) {
     return (
         <Card>
-            <CardImg top src={dishdtil.image} alt={dishdtil.name} />
+            <CardImg top src={baseUrl + dishdtil.image} alt={dishdtil.name} />
             <CardBody>
                 <CardTitle>{dishdtil.name}</CardTitle>
                 <CardText>{dishdtil.description}</CardText>
@@ -21,16 +23,15 @@ function Rendercomment({ dishdtil }) {
 }
 
 
-function Dishdetail({ dish, isLoading, dishesErrMess, comments, addComment }) {
+function Dishdetail({ dish, isLoading, dishesErrMess, comments, postComment }) {
     console.log(dish);
     const [modal, setModal] = useState(false);
-    let dishId = "10";
     const toggleModal = () => {
         setModal(!modal)
     }
     const modalSubmit = (values) => {
         toggleModal();
-        addComment(dishId, values.rating, values.yourname, values.comment);
+        postComment(dish.id, values.rating, values.yourname, values.comment);
         alert(JSON.stringify(values));
     }
     const required = (val) => val && val.length;
